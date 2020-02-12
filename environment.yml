@@ -12,6 +12,9 @@ dependencies:
   - pytest
   - aiohttp
   - aiofiles
+  - aioftp
+  - async-timeout
+  - pandas
   - pip
   - pip:
       - typer

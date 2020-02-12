@@ -1,5 +1,4 @@
 import asyncio
-import sys
 import typer
 from pathlib import Path
 from typing import List
