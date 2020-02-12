@@ -1,0 +1,17 @@
+name: shogun_db
+channels:
+  - knights-lab
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3
+  - Click
+  - taxonkit
+  - shogun
+  - pytest
+  - aiohttp
+  - aiofiles
+  - pip
+  - pip:
+      - typer
