@@ -1,0 +1,11 @@
+#!/bin/bash -l
+#PBS -l walltime=96:00:00,nodes=1:ppn=32,mem=998gb
+#PBS -m abe
+#PBS -M hillm096@umn.edu
+#PBS -q amdsmall
+rm -r /dev/shm/*
+hostname >> /home/knightsd/hillm096/isub-hosts.txt
+# run stuff...
+while true; do
+sleep 300
+done

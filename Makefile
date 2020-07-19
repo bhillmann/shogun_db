@@ -42,8 +42,7 @@ ${OUTPUT_DIR}/ftpfilepaths : ${OUTPUT_DIR}/ftpdirpaths
 
 ${OUTPUT_DIR}/genomes/%.gz : ${OUTPUT_DIR}/ftpfilepaths
 	mkdir -p ${OUTPUT_DIR}/genomes
-	cat ${OUTPUT_DIR}/ftpfilepaths | xargs -n 1 -P 16 wget -q --retry-c
-	 onnrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 99 -P ${OUTPUT_DIR}/genomes
+	cat ${OUTPUT_DIR}/ftpfilepaths | xargs -n 1 -P 16 wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 99 -P ${OUTPUT_DIR}/genomes
 
 #${OUTPUT_DIR}/combined_seqs.fna ${OUTPUT_DIR}/combined_plasmids.fna : ${OUTPUT_DIR}/fnas/%.fna
 #	scripts/lingenome ${OUTPUT_DIR}/fnas/%.fna ${OUTPUT_DIR}/combined_seqs.fna ${OUTPUT_DIR}/combined_plasmids.fna HEADFIX
