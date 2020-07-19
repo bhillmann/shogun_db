@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # usage: python me.py \
 #  alignment.burst.otu.txt db.tax sheared_bayes.txt
 
