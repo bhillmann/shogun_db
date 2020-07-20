@@ -1,3 +1,12 @@
+# Download the files for assembly
+
+
+# Strip the trailing characters from the download
+```
+for f in *.fna; do FN=${f/_/-}; FN=${FN/_*/}; mv $f ${FN/-/_}.fna; done
+```
+
+
 conda create -n seqkit -c bioconda -c conda-forge seqkit
 
 # according to the website, we can run up to 50 jobs at once
@@ -27,13 +36,35 @@ python shear_results_fix.py Rep94.shear.otu.txt Rep94.tax Rep94.shear
 /scratch.global/ben/refseq/shogun
 ```
 
+# Taxonomy
+```
+mkdir taxtmp && cd taxtmp
+wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip
+unzip taxdmp.zip
+/mnt/nvidia/pkr/code/BURST/bin/t2gg nodes.dmp names.dmp tid2gg.txt SUBONLY
+sort -k1,1 tid2gg.txt > tid2gg.srt.txt
+join -t $'\t' -12 -21 -e0 -o'1.1,2.2,1.4,0,1.3' fna/rawtax.tax taxtmp/tid2gg.srt.txt | sort -k2 > alltax.txt
+```
+
 # Shearing
 ```
 # Next step is to check to see if the shearing of the file worked
 # on teraminx
 time rsync -rP hillm096@login.msi.umn.edu:/scratch.global/ben/refseq/shear_100_50.1m.b6 /project/flatiron/data/rep200/rep200_abfpv/shogun/shear_100_50.1m.b6
 # on superglass
-time rsync -rP hillm096@teraminx.cs.umn.edu:/project/flatiron/data/rep200/rep200_abfpv/shogun/shear_100_50.1m.b6 /mnt/btrfs/data/rep200/shogun/shear_100_50.1m.b6  
+time rsync -rP hillm096@teraminx.cs.umn.edu:/project/flatiron/data/rep200/rep200_abfpv/shogun/shear_100_50.1m.b6 /mnt/btrfs/data/rep200/shogun/shear_100_50.1m.b6
+# locally
+time rsync -rP bhillmann@192.168.1.73:/mnt/btrfs/data/rep200/shogun/shear_100_50.1m.b6 /home/bhillmann/petard/code/shogun_db/scratch/shear_100_50.1m.b6  
 
+# embalmulate
+sed 's/_/./1' ./shear_100_50.1m.b6 > ./shear_100_50.1m.fixed.b6
 
+/mnt/nvidia/pkr/code/BURST/embalmlets/bin/embalmulate /mnt/btrfs/data/rep200/shogun/shear_100_50.1m.fixed.b6 /mnt/btrfs/data/rep200/shogun/shear.1m.fixed.otu.txt
+
+/usr/bin/time -v /mnt/nvidia/pkr/code/shogun_db/scripts/shear_results.py /mnt/btrfs/data/rep200/shogun/shear.1m.fixed.otu.txt /mnt/btrfs/data/rep200/shogun/alltax.txt /mnt/btrfs/data/rep200/shogun/shear.txt
+
+# No fix
+/mnt/nvidia/pkr/code/BURST/embalmlets/bin/embalmulate /mnt/btrfs/data/rep200/shogun/shear_100_50.1m.b6 /mnt/btrfs/data/rep200/shogun/shear.1m.otu.txt
+
+/usr/bin/time -v /mnt/nvidia/pkr/code/shogun_db/scripts/shear_results.py /mnt/btrfs/data/rep200/shogun/shear.1m.fixed.otu.txt /mnt/btrfs/data/rep200/shogun/alltax.txt /mnt/btrfs/data/rep200/shogun/shear.txt
 ```
